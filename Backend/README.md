@@ -203,5 +203,104 @@ The request body should be a JSON object containing the following fields:
     },
     "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
 }
+
+## Captain Login Endpoint
+
+### POST `/captain/login`
+
+#### Description
+
+Authenticates a captain and returns a token.
+
+#### Request Body
+
+The request body should be a JSON object containing the following fields:
+
+- `email` (string, required): Captain's email address (must be a valid email)
+- `password` (string, required): Captain's password (minimum 6 characters)
+
+#### Example Request
+
+```json
+{
+    "email": "janesmith@example.com",
+    "password": "password123"
+}
+```
+
+#### Example Response
+
+```json
+{
+    "captain": {
+        "id": "67890",
+        "email": "janesmith@example.com"
+    },
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+}
+
+## Captain Profile Endpoint
+
+### GET `/captain/profile`
+
+#### Description
+
+Retrieves the profile information of the currently authenticated captain.
+
+#### Headers Required
+
+- `Authorization`: Bearer token (required)
+
+#### Example Request
+
+```json
+{}
+```
+
+#### Example Response
+
+```json
+{
+    "captain": {
+        "id": "67890",
+        "fullname": {
+            "firstname": "Jane",
+            "lastname": "Smith"
+        },
+        "email": "janesmith@example.com",
+        "vehicle": {
+            "color": "Red",
+            "plate": "XYZ123",
+            "capacity": 4,
+            "vehicleType": "Sedan"
+        }
+    }
+}
+```
+
+## Captain Logout Endpoint
+
+### POST `/captain/logout`
+
+#### Description
+
+Logs out the currently authenticated captain.
+
+#### Headers Required
+
+- `Authorization`: Bearer token (required)
+
+#### Example Request
+
+```json
+{}
+```
+
+#### Example Response
+
+```json
+{
+    "message": "Successfully logged out"
+}
 ```
 
