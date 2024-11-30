@@ -142,3 +142,66 @@ Logs out the currently authenticated user.
 }
 ```
 
+## Captain Registration Endpoint
+
+### POST `/captain/register`
+
+#### Description
+
+Registers a new captain (driver) in the system.
+
+#### Request Body
+
+The request body should be a JSON object containing the following fields:
+
+- `fullname` (object, required)
+  - `firstname` (string, required): Captain's first name (minimum 3 characters)
+  - `lastname` (string, optional): Captain's last name
+- `email` (string, required): Captain's email address (must be a valid email)
+- `password` (string, required): Captain's password (minimum 6 characters)
+- `vehicle` (object, required)
+  - `color` (string, required): Vehicle color (minimum 3 characters)
+  - `plate` (string, required): Vehicle plate number (minimum 3 characters)
+  - `capacity` (number, required): Vehicle passenger capacity
+  - `vehicleType` (string, required): Vehicle model/type (minimum 3 characters)
+
+#### Example Request
+```json
+{
+    "fullname": {
+        "firstname": "Jane",
+        "lastname": "Smith"
+    },
+    "email": "janesmith@example.com",
+    "password": "password123",
+    "vehicle": {
+        "color": "Red",
+        "plate": "XYZ123",
+        "capacity": 4,
+        "vehicleType": "Sedan"
+    }
+}
+```
+
+#### Example Response
+
+```json
+{
+    "captain": {
+        "id": "67890",
+        "fullname": {
+            "firstname": "Jane",
+            "lastname": "Smith"
+        },
+        "email": "janesmith@example.com",
+        "vehicle": {
+            "color": "Red",
+            "plate": "XYZ123",
+            "capacity": 4,
+            "vehicleType": "Sedan"
+        }
+    },
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+}
+```
+
