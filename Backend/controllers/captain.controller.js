@@ -66,8 +66,16 @@ module.exports.getCaptainProfile = async (req, res) => {
 }
 
 module.exports.logoutCaptain = async (req, res) => {
-    const token = req.cookies.token || req.headers.authorization?.split(' ')[1];
-    await blacklistTokenModel.create({ token });
     res.clearCookie('token');
-    res.status(200).json({ message: 'Logout successfully' });
+    const token = req.cookies.token || req.headers.authorization?.split(' ')[1];
+    try {
+        await blacklistTokenModel.create({ token });
+    } catch (error) {
+        if (error.code === 11000) {
+            // Duplicate key error, token already blacklisted
+            return res.status(200).json({ message: 'Logged out successfully' });
+        }
+        return res.status(500).json({ message: 'Internal server error' });
+    }
+    res.status(200).json({ message: 'Logged out successfully' });
 }

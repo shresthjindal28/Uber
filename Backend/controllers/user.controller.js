@@ -64,9 +64,24 @@ module.exports.getUserProfile = async (req, res) => {
     res.status(200).json(req.user);
 }
 
+// module.exports.logoutUser = async (req, res) => {
+//     res.clearCookie('token');
+//     const token = req.cookies.token || req.headers.authorization.split(' ')[1];
+//     await BlacklistToken.create({ token });
+//     res.status(200).json({ message: 'Logged out successfully' });
+// }
+
 module.exports.logoutUser = async (req, res) => {
     res.clearCookie('token');
     const token = req.cookies.token || req.headers.authorization.split(' ')[1];
-    await BlacklistToken.create({ token });
+    try {
+        await BlacklistToken.create({ token });
+    } catch (error) {
+        if (error.code === 11000) {
+            // Duplicate key error, token already blacklisted
+            return res.status(200).json({ message: 'Logged out successfully' });
+        }
+        return res.status(500).json({ message: 'Internal server error' });
+    }
     res.status(200).json({ message: 'Logged out successfully' });
 }
