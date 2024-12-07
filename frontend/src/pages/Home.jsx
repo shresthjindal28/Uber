@@ -3,13 +3,20 @@ import {useGSAP} from '@gsap/react'
 import gsap from "gsap";
 import 'remixicon/fonts/remixicon.css'
 import LocationSearchPanel from "../components/LocationSearchPanel";
+import VehiclePanle from "../components/VehiclePanle";
+import ConfirmedVehicle from "../components/ConfirmedVehicle";
 
 const Home = () => {
   const [pickup, setPickup] = useState("");
   const [destination, setDestination] = useState("");
   const [pannel, setPannel] = useState(false)
+  const vehiclePanleRef = useRef(null)
   const panelRef = useRef(null)
   const panelCloseRef = useRef(null)
+  const [vehiclePanelOpen, setVehiclePanelOpen] = useState(false)
+  const confirmRidepanle = useRef(null)
+  const [confirmRide, setConfirmRide] = useState(false)
+
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -35,12 +42,36 @@ const Home = () => {
             opacity: 0
         })
     }
-}, [ pannel ])
+  }, [ pannel ])
+
+  useGSAP(function () {
+    if (vehiclePanelOpen) {
+      gsap.to(vehiclePanleRef.current, {
+        transform:'translateY(0)'
+      })
+    } else {
+      gsap.to(vehiclePanleRef.current, {
+        transform:'translateY(100%)'
+      })
+    }
+  },[vehiclePanelOpen])
+
+  useGSAP(function () {
+    if (confirmRide) {
+      gsap.to(confirmRidepanle.current, {
+        transform:'translateY(0)'
+      })
+    } else {
+      gsap.to(confirmRidepanle.current, {
+        transform:'translateY(100%)'
+      })
+    }
+  },[confirmRide])
 
 
 
   return (
-    <div className="h-screen relative">
+    <div className="h-screen relative ">
       <img
         className="w-24 mt-5 absolute ml-8"
         src="https://upload.wikimedia.org/wikipedia/commons/c/cc/Uber_logo_2018.png"
@@ -94,15 +125,22 @@ const Home = () => {
         </div>
 
         <div ref={panelRef} className="h-0 bg-white ">
-              <LocationSearchPanel/>
+              <LocationSearchPanel setPannel={setPannel} setVehiclePanelOpen={setVehiclePanelOpen} />
         </div>
       </div>
 
-      <div className="fixed z-10">
-        <div className="">
-          {/* sample vehicle data */}
+      <div className="">
+        <div ref={vehiclePanleRef} className="fixed z-10 w-full bottom-0 translate-y-full bg-white px-3 py-8">
+          <VehiclePanle setConfirmRide={setConfirmRide} setVehiclePanelOpen={setVehiclePanelOpen}/>
         </div>
       </div>
+
+      <div className="">
+        <div ref={confirmRidepanle} className="fixed z-10 w-full bottom-0 translate-y-full bg-white px-3 py-8">
+          {/* <ConfirmedVehicle /> */}
+        </div>
+      </div>
+
     </div>
   );
 };
