@@ -5,6 +5,7 @@ import 'remixicon/fonts/remixicon.css'
 import LocationSearchPanel from "../components/LocationSearchPanel";
 import VehiclePanle from "../components/VehiclePanle";
 import ConfirmedVehicle from "../components/ConfirmedVehicle";
+import LookingForDriver from "../components/LookingForDriver";
 
 const Home = () => {
   const [pickup, setPickup] = useState("");
@@ -16,6 +17,8 @@ const Home = () => {
   const [vehiclePanelOpen, setVehiclePanelOpen] = useState(false)
   const confirmRidepanle = useRef(null)
   const [confirmRide, setConfirmRide] = useState(false)
+  const vehicleFoundRef = useRef(null)
+  const [ vehicleFound, setVehicleFound ] = useState(false)
 
 
   const submitHandler = (e) => {
@@ -26,6 +29,7 @@ const Home = () => {
     if (pannel) {
         gsap.to(panelRef.current, {
             height: '70%',
+            display:'block',
             padding: 24
             // opacity:1
         })
@@ -35,6 +39,7 @@ const Home = () => {
     } else {
         gsap.to(panelRef.current, {
             height: '0%',
+            display:'none',
             padding: 0
             // opacity:0
         })
@@ -68,7 +73,17 @@ const Home = () => {
     }
   },[confirmRide])
 
-
+  useGSAP(function () {
+    if (vehicleFound) {
+        gsap.to(vehicleFoundRef.current, {
+            transform: 'translateY(0)'
+        })
+    } else {
+        gsap.to(vehicleFoundRef.current, {
+            transform: 'translateY(100%)'
+        })
+    }
+}, [ vehicleFound ])
 
   return (
     <div className="h-screen relative ">
@@ -90,6 +105,7 @@ const Home = () => {
         <div className="h-[30%] p-5 bg-white relative">
           <h5 ref={panelCloseRef} onClick={()=>{
             setPannel(false)
+
           }} className="absolute right-6 top-6 text-2xl">
             <i className="ri-arrow-down-wide-line"></i>
           </h5>
@@ -124,7 +140,7 @@ const Home = () => {
           </form>
         </div>
 
-        <div ref={panelRef} className="h-0 bg-white ">
+        <div ref={panelRef} className=" hidden bg-white ">
               <LocationSearchPanel setPannel={setPannel} setVehiclePanelOpen={setVehiclePanelOpen} />
         </div>
       </div>
@@ -135,10 +151,12 @@ const Home = () => {
         </div>
       </div>
 
-      <div className="">
-        <div ref={confirmRidepanle} className="fixed z-10 w-full bottom-0 translate-y-full bg-white px-3 py-8">
-          {/* <ConfirmedVehicle /> */}
-        </div>
+      <div ref={confirmRidepanle} className="fixed z-10 w-full bottom-0 translate-y-full bg-white px-3 py-8">
+            <ConfirmedVehicle setConfirmRide={setConfirmRide} setVehicleFound={setVehicleFound}   />
+      </div>
+
+      <div ref={vehicleFoundRef} className="fixed z-10 w-full bottom-0 translate-y-full bg-white px-3 py-8">
+            <LookingForDriver setVehicleFound={setVehicleFound} />
       </div>
 
     </div>
