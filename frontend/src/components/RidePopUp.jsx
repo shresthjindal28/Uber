@@ -1,6 +1,6 @@
 import React from "react";
 
-const RidePopUp = () => {
+const RidePopUp = (props) => {
   return (
     <div>
       <h5
@@ -57,10 +57,10 @@ const RidePopUp = () => {
         </div>
         <div className="mt-5 w-full ">
           <button
-            // onClick={() => {
-            //   props.setConfirmRidePopupPanel(true);
-            //   props.confirmRide();
-            // }}
+            onClick={() => {
+              props.setConfirmRidePopupPanel(true);
+              // props.confirmRide();
+            }}
             className=" bg-green-600 w-full text-white font-semibold p-2 px-10 rounded-lg"
           >
             Accept
